@@ -1,0 +1,31 @@
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        - destination:
+            host: reviews
+            subset: v1
+          weight: 70
+        - destination:
+            host: reviews
+            subset: v2
+          weight: 30
+--- 
+kind: DestinationRule
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+    - labels:
+        version: v1
+      name: v1
+    - labels:
+        version: v2
+      name: v2

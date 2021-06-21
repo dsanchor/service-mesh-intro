@@ -9,6 +9,13 @@ echo "Bootstraping user $USER (Istio ns=$MESH_NS)"
 echo "Creating namespaces..."
 cat ./ocp/namespaces.yaml | USER_NS=$USER_NS envsubst | oc apply -f -
 
+echo "Creating terminal..."
+cat ./ocp/terminal/dev-workspace.yaml | USER_NS=$USER_NS envsubst | oc apply -f -
+
+echo "Creating exports"
+cat ./ocp/terminal/configmap.yaml | USER_NS=$USER_NS USER=$USER \
+ PASSWORD=$USER_NS envsubst | oc apply -f -
+
 echo "Adding view role to ns=$MESH_NS"
 cat ./ocp/rb/mesh-ns-rb.yaml | USER=$USER MESH_NS=$MESH_NS USER_NS=$USER_NS envsubst | oc apply -f -
 
